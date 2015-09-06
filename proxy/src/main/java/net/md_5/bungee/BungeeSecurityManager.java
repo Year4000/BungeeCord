@@ -9,7 +9,7 @@ import net.md_5.bungee.api.scheduler.GroupedThreadFactory;
 public class BungeeSecurityManager extends SecurityManager
 {
 
-    private static final boolean ENFORCE = false;
+    private static final boolean ENFORCE = true;
 
     private void checkRestricted(String text)
     {
@@ -33,8 +33,8 @@ public class BungeeSecurityManager extends SecurityManager
                 }
             }
 
-            // Everyone but system can't do anything
-            if ( loader != null )
+            // Everyone but system can't do anything, unless they know what they are doing
+            if ( loader != null && System.getProperty( "IReallyKnowWhatIAmDoingISwear" ) == null )
             {
                 AccessControlException ex = new AccessControlException( "Plugin violation: " + text );
                 if ( ENFORCE )
