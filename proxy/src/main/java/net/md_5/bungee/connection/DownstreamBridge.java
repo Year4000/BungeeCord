@@ -82,7 +82,15 @@ public class DownstreamBridge extends PacketHandler
 
         if ( !server.isObsolete() )
         {
-            con.disconnect( bungee.getTranslation( "lost_connection" ) );
+            ServerInfo info = con.getReconnectServer();
+            if ( info != null )
+            {
+                server.setObsolete( true );
+                con.connectNow( info );
+            } else
+            {
+                con.disconnect( bungee.getTranslation( "lost_connection" ) );
+            }
         }
 
         ServerDisconnectEvent serverDisconnectEvent = new ServerDisconnectEvent( con, server.getInfo() );
