@@ -126,7 +126,6 @@ public enum Protocol
         private final TIntObjectMap<TIntIntMap> packetRemap = new TIntObjectHashMap<>();
         private final TIntObjectMap<TIntIntMap> packetRemapInv = new TIntObjectHashMap<>();
 
-        
         {
             packetRemap.put( ProtocolConstants.MINECRAFT_1_8, new TIntIntHashMap() );
             packetRemapInv.put( ProtocolConstants.MINECRAFT_1_8, new TIntIntHashMap() );
@@ -161,14 +160,11 @@ public enum Protocol
             {
                 throw new BadPacketException( "Packet with id " + id + " outside of range " );
             }
-            if ( packetConstructors[id] == null )
-            {
-                throw new BadPacketException( "No packet with id " + id );
-            }
 
+            Constructor<? extends DefinedPacket> constructor = packetConstructors[id];
             try
             {
-                return packetConstructors[id].newInstance();
+                return ( constructor == null ) ? null : constructor.newInstance();
             } catch ( ReflectiveOperationException ex )
             {
                 throw new BadPacketException( "Could not construct packet with id " + id, ex );
